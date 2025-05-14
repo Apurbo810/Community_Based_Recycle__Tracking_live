@@ -21,7 +21,7 @@ export default function PayoutSetup() {
       }
 
       await axios.post(
-        `http://localhost:3000/recycler/setup/${recyclerId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/setup/${recyclerId}`,
         { method, details },
         {
           headers: { Authorization: `Bearer ${token}` },

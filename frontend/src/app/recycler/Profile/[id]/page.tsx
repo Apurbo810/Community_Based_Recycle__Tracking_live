@@ -40,7 +40,7 @@ export default function Profile() {
     }
 
     try {
-      const res = await axios.get(`http://localhost:3000/recycler/profile/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/profile/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

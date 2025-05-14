@@ -26,7 +26,7 @@ export default function Payment() {
 
   const fetchWalletDetails = async (id: string, token: string) => {
     try {
-      const response = await axios.get(`http://localhost:3000/recycler/financials/${id}`, {
+      const response = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/financials/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setWallet(response.data.wallet);
@@ -45,7 +45,7 @@ export default function Payment() {
       setError(null);
       setMessage(null);
       await axios.post(
-        `http://localhost:3000/recycler/generate-2fa/${recyclerId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/generate-2fa/${recyclerId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -67,7 +67,7 @@ export default function Payment() {
       setError(null);
       setMessage(null);
       const response = await axios.post(
-        `http://localhost:3000/recycler/cashout/${recyclerId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/cashout/${recyclerId}`,
         { token: twofaCode, cashoutAmount },
         { headers: { Authorization: `Bearer ${token}` } }
       );

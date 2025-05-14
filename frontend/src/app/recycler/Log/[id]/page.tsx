@@ -36,7 +36,7 @@ export default function LogMaterialForm() {
 
     try {
       await axios.post(
-        `http://localhost:3000/recycler/log-material/${userId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/log-material/${userId}`,
         {
           weight: parseFloat(weight),
           materialType: materialType.toLowerCase(),

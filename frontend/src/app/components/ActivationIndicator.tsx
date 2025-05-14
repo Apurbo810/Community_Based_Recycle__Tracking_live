@@ -25,7 +25,7 @@ const ActivationIndicator: React.FC = () => {
       setIsLoggedIn(true);
 
       // AJAX request to verify activation status
-      const res = await axios.get(`http://localhost:3000/recycler/verify-id/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/verify-id/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

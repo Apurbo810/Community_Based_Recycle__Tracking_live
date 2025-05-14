@@ -35,7 +35,7 @@ export default function Profile() {
       console.log("Fetching Profile Picture for ID:", id);
       console.log("Token:", token); // Debugging token presence
   
-      const res = await axios.get(`http://localhost:3000/recycler/profile-picture/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/profile-picture/${id}`, {
         responseType: "blob",
         headers: {
           Authorization: `Bearer ${token}`, // ✅ Ensure token is included
@@ -78,7 +78,7 @@ export default function Profile() {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post(`http://localhost:3000/recycler/upload/${id}`, formData, {
+      await axios.post(`https://community-based-recycle-tracking-live.onrender.com/recycler/upload/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

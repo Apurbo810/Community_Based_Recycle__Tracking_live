@@ -34,7 +34,7 @@ export default function History() {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/recycler/log-material/history/${id}`,
+          `https://community-based-recycle-tracking-live.onrender.com/recycler/log-material/history/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setHistoryItems(response.data);

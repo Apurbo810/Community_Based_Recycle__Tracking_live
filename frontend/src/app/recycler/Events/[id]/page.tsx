@@ -37,7 +37,7 @@ export default function Events() {
       console.log("✅ User is logged in. Checking activation status...");
       
       // AJAX request to verify activation status
-      const res = await axios.get(`http://localhost:3000/recycler/verify-id/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/verify-id/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -72,7 +72,7 @@ export default function Events() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:3000/recycler/events/${recyclerId}`, {
+      const response = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/events/${recyclerId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(response.data.data);
@@ -89,7 +89,7 @@ export default function Events() {
     }
   
     try {
-      await axios.post(`http://localhost:3000/recycler/${action}/${recyclerId}/${eventId}`, {}, {
+      await axios.post(`https://community-based-recycle-tracking-live.onrender.com/recycler/${action}/${recyclerId}/${eventId}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
   

@@ -24,7 +24,7 @@ export default function VerifyId() {
   const checkVerification = async (id: string) => {
     try {
       const token = localStorage.getItem("token"); // Retrieve stored token
-      const res = await axios.get(`http://localhost:3000/recycler/verify-id/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/verify-id/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIsVerified(res.data.verified);
@@ -46,7 +46,7 @@ export default function VerifyId() {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/recycler/activate/${id}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/activate/${id}`,
         { id: Number(id), token },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
@@ -67,7 +67,7 @@ export default function VerifyId() {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/recycler/generate-2fa/${id}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/generate-2fa/${id}`,
         {},
         { headers: { Authorization: `Bearer ${authToken}` } }
       );

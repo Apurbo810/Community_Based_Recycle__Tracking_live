@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-      const res = await axios.get(`http://localhost:3000/recycler/profile/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/profile/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-      const res = await axios.get(`http://localhost:3000/recycler/profile-picture/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/profile-picture/${id}`, {
         responseType: "blob",
         headers: { Authorization: `Bearer ${token}` },
       });

@@ -62,7 +62,7 @@ export default function ProgressPage() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/recycler/progress/${userId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/progress/${userId}`,
         {
           from: dateRange.from,
           to: dateRange.to,

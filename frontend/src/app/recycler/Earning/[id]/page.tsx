@@ -27,7 +27,7 @@ export default function ShowEarnings() {
   const fetchFinancials = async (id: string) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`http://localhost:3000/recycler/financials/${id}`, {
+      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/financials/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFinancials(res.data);

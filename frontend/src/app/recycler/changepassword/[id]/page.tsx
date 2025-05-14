@@ -45,7 +45,7 @@ export default function ChangePassword() {
   
     try {
       const response = await axios.post(
-        `http://localhost:3000/recycler/update-password/${id}`, // Changed from PUT to POST
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/update-password/${id}`, // Changed from PUT to POST
         { oldPassword: currentPassword, newPassword, confirmPassword }, // Match backend params
         { headers: { Authorization: `Bearer ${token}` } }
       );

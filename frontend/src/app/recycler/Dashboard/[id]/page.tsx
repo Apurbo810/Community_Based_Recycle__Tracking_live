@@ -47,7 +47,7 @@ export default function Dashboard() {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/recycler/joined-events/${recyclerId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/joined-events/${recyclerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setEvents(response.data.data);
@@ -75,7 +75,7 @@ export default function Dashboard() {
   
     try {
       const response = await axios.post(
-        `http://localhost:3000/recycler/progress/${recyclerId}`,
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/progress/${recyclerId}`,
         requestBody,
         { headers: { Authorization: `Bearer ${token}` } }
       );
