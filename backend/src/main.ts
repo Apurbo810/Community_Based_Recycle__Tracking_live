@@ -9,6 +9,9 @@ async function bootstrap() {
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   app.enableCors();
-  await app.listen(3000);
+
+  // ✅ Use the PORT environment variable (required by Render)
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
 }
 bootstrap();
