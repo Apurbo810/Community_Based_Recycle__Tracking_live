@@ -24,12 +24,15 @@ export default function VerifyId() {
   const checkVerification = async (id: string) => {
     try {
       const token = localStorage.getItem("token"); // Retrieve stored token
-      const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/verify-id/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/verify-id/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setIsVerified(res.data.verified);
-    } catch (err) {
-      console.error("Verification failed:", err);
+    } catch {
+      console.error("Verification failed");
       setMessage("Failed to check verification status.");
     } finally {
       setLoading(false);
@@ -52,7 +55,7 @@ export default function VerifyId() {
       );
       setMessage(res.data.message);
       setIsVerified(true);
-    } catch (err) {
+    } catch {
       setMessage("Invalid 2FA code or activation failed.");
     }
   };
@@ -72,7 +75,7 @@ export default function VerifyId() {
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setMessage(`2FA code sent to your email: ${res.data.message}`);
-    } catch (err) {
+    } catch {
       setMessage("Failed to generate 2FA code.");
     }
   };
@@ -88,7 +91,9 @@ export default function VerifyId() {
           <p className="text-center text-green-500 font-medium">Your account is verified.</p>
         ) : (
           <div className="text-center">
-            <p className="text-[#8e8071] font-medium">Your account is not verified. Enter your 2FA code below:</p>
+            <p className="text-[#8e8071] font-medium">
+              Your account is not verified. Enter your 2FA code below:
+            </p>
             <input
               type="text"
               value={token}

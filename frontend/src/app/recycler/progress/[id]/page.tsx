@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import jwt from 'jsonwebtoken';
@@ -15,10 +15,16 @@ import {
   Legend,
 } from 'chart.js';
 import Navbar from "../../../components/Navbar";
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+interface ProgressItem {
+  date: string;
+  earnings: number;
+}
+
 export default function ProgressPage() {
-  const [progressData, setProgressData] = useState<any[]>([]); // Initialize as an empty array
+  const [progressData, setProgressData] = useState<ProgressItem[]>([]);
   const [dateRange, setDateRange] = useState<{ from: string; to: string }>({ from: '', to: '' });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +41,7 @@ export default function ProgressPage() {
       return;
     }
     try {
-      const decodedToken = jwt.decode(token) as { id: number; role: string };
+      const decodedToken = jwt.decode(token) as { id: number; role: string } | null;
       if (!decodedToken?.id || !decodedToken?.role) {
         router.push('/login');
         return;
@@ -54,7 +60,7 @@ export default function ProgressPage() {
     }
   }, [userRole, router]);
 
-  const fetchProgressData = async () => {
+  const fetchProgressData = useCallback(async () => {
     if (!userId || !dateRange.from || !dateRange.to) return;
 
     setLoading(true);
@@ -74,19 +80,20 @@ export default function ProgressPage() {
         }
       );
 
-      // Handle the nested data structure
-      const progress = response.data?.data?.data || [];
-      console.log('Progress Data:', progress); // Debugging log
-
-      setProgressData(progress); // Set the correct array
+      const progress: ProgressItem[] = response.data?.data?.data || [];
+      setProgressData(progress);
       setError(null);
-    } catch (err) {
-      console.error('Error fetching progress data:', err);
+    } catch (error) {
+      console.error('Error fetching progress data:', error);
       setError('Failed to fetch progress data.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, dateRange.from, dateRange.to]);
+
+  useEffect(() => {
+    fetchProgressData();
+  }, [fetchProgressData]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -96,18 +103,12 @@ export default function ProgressPage() {
     }));
   };
 
-  useEffect(() => {
-    if (userId && dateRange.from && dateRange.to) {
-      fetchProgressData();
-    }
-  }, [userId, dateRange]);
-
   const chartData = {
-    labels: progressData.map((item: any) => item.date),
+    labels: progressData.map((item) => item.date),
     datasets: [
       {
         label: 'Daily Earnings',
-        data: progressData.map((item: any) => item.earnings),
+        data: progressData.map((item) => item.earnings),
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,

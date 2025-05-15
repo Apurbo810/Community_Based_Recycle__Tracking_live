@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/app/components/Header';
 import Image from 'next/image'; // Next.js optimized image loading
 
-const index = () => {
+const Index = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = ['/1.png', '/2.png', '/3.png', '/4.png']; // Ensure correct paths
 
@@ -30,12 +30,12 @@ const index = () => {
             <div key={index} className="w-full h-full flex-shrink-0 relative">
               {/* Optimized Next.js Image */}
               <Image
-                src={image}
-                alt={`Slide ${index}`}
-                layout="fill"
-                objectFit="cover"
-                priority={index === 0} // Load first image faster
-              />
+                  src={image}
+                  alt={`Slide ${index}`}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  priority={index === 0}
+                />
             </div>
           ))}
         </div>
@@ -57,4 +57,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

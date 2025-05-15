@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
-import Navbar3 from "@/app/components/Navbar3";
+
 interface HistoryItem {
   id: string;
   materialType: string;

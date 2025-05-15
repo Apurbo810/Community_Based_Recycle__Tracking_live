@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../../components/Navbar";
 import Navbar2 from "../../../components/Navbar2";
+import Image from "next/image";
 
 export default function Profile() {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
@@ -25,33 +26,31 @@ export default function Profile() {
   const fetchProfilePicture = async (id: string) => {
     try {
       const token = localStorage.getItem("token");
-  
+
       if (!token) {
         setError("Authentication token is missing. Please log in.");
         setLoading(false);
         return;
       }
-  
+
       console.log("Fetching Profile Picture for ID:", id);
       console.log("Token:", token); // Debugging token presence
-  
+
       const res = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/profile-picture/${id}`, {
         responseType: "blob",
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Ensure token is included
+          Authorization: `Bearer ${token}`,
         },
       });
-  
+
       const imageUrl = URL.createObjectURL(res.data);
       setProfilePicture(imageUrl);
-    } catch (err) {
-      console.error("Error fetching profile picture:", err);
+    } catch {
       setProfilePicture("/default-profile.png"); // Fallback image if API call fails
     } finally {
       setLoading(false);
     }
   };
-  
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +85,7 @@ export default function Profile() {
       });
 
       fetchProfilePicture(id); // Refresh profile picture after upload
-    } catch (err) {
+    } catch {
       setError("Failed to upload profile picture.");
     }
   };
@@ -94,7 +93,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#d6ae7b] to-[#eacda3]">
       <Navbar />
-      
+
       <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <Navbar2 />
 
@@ -103,12 +102,17 @@ export default function Profile() {
           {loading ? (
             <p className="text-gray-500">Loading profile picture...</p>
           ) : (
-            <img
-              src={profilePicture || "/default-profile.png"}
-              onError={(e) => (e.currentTarget.src = "/default-profile.png")} // ✅ Prevent broken images
-              alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-[#8e8071] object-cover"
-            />
+            <div className="relative w-32 h-32 rounded-full border-4 border-[#8e8071] overflow-hidden">
+              <Image
+                src={profilePicture || "/default-profile.png"}
+                alt="Profile"
+                fill
+                style={{ objectFit: "cover" }}
+                onError={(e) => {
+                  e.currentTarget.src = "/default-profile.png";
+                }}
+              />
+            </div>
           )}
 
           {/* File Input */}

@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";  // removed usePathname import because unused
 import Navbar from "@/app/components/Navbar";
-import Navbar3 from "@/app/components/Navbar3";
+// Removed import Navbar3 since it's not used
+// import Navbar3 from "@/app/components/Navbar3";
 
 export default function LogMaterialForm() {
   const [weight, setWeight] = useState("");
@@ -16,7 +17,7 @@ export default function LogMaterialForm() {
   const [userId, setUserId] = useState<string | null>(null);
 
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname(); // removed unused variable
 
   useEffect(() => {
     const storedId = localStorage.getItem("id");
@@ -53,14 +54,15 @@ export default function LogMaterialForm() {
       setPrice("");
 
       setTimeout(() => setSuccess(null), 1000);
-    } catch (error) {
+    } catch {
+      // Renamed catch param to nothing since it's unused
       setError("Failed to log material.");
     }
   };
 
   // Handle navigation to history page
   const goToHistory = () => {
-    router.push(`/recycler/met_history/${userId}`); // Assuming your history page is at the "/history" path
+    router.push(`/recycler/met_history/${userId}`);
   };
 
   return (
@@ -68,7 +70,7 @@ export default function LogMaterialForm() {
       <Navbar />
       <div className="pt-20 flex justify-center">
         <div className="flex bg-white rounded shadow-md p-6 flex-col items-center w-full max-w-lg">
-          {/* Navbar3 is inside the form now */}
+          {/* Removed Navbar3 usage */}
 
           <form onSubmit={handleSubmit} className="w-full text-[#8e8071]">
             <h2 className="text-xl font-bold mb-4 text-center">Log Material</h2>
@@ -133,7 +135,6 @@ export default function LogMaterialForm() {
             </button>
           </form>
 
-          {/* Go to History button */}
           <button
             onClick={goToHistory}
             className="w-full bg-gray-500 text-white py-2 rounded mt-4 hover:bg-gray-700"

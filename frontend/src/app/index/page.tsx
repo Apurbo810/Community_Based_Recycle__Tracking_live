@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Header from '@/app/components/Header';
-import Image from 'next/image'; // Next.js optimized image loading
+import React, { useState, useEffect } from "react";
+import Header from "@/app/components/Header";
+import Image from "next/image";
 
-const index = () => {
+const Index = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = ['/1.png', '/2.png', '/3.png', '/4.png']; // Ensure correct paths
+  const images = ["/1.png", "/2.png", "/3.png", "/4.png"]; // Ensure images exist in public folder
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,13 +28,12 @@ const index = () => {
         >
           {images.map((image, index) => (
             <div key={index} className="w-full h-full flex-shrink-0 relative">
-              {/* Optimized Next.js Image */}
               <Image
                 src={image}
                 alt={`Slide ${index}`}
-                layout="fill"
-                objectFit="cover"
-                priority={index === 0} // Load first image faster
+                fill
+                style={{ objectFit: "cover" }}
+                priority={index === 0}
               />
             </div>
           ))}
@@ -47,8 +46,9 @@ const index = () => {
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`w-4 h-4 rounded-full transition-all ${
-                currentIndex === index ? 'bg-green-500 scale-125' : 'bg-gray-400'
+                currentIndex === index ? "bg-green-500 scale-125" : "bg-gray-400"
               }`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
@@ -57,4 +57,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

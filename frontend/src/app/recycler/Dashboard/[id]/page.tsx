@@ -33,69 +33,61 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (recyclerId && token) {
-      fetchEvents();
-      fetchEarnings();
-    }
+    if (!recyclerId || !token) return;
+
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(
+          `https://community-based-recycle-tracking-live.onrender.com/recycler/joined-events/${recyclerId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setEvents(response.data.data);
+      } catch {
+        setEventError("Failed to fetch events.");
+      }
+    };
+
+    const fetchEarnings = async () => {
+      const toDate = new Date();
+      const fromDate = new Date();
+      fromDate.setDate(toDate.getDate() - 7); // Last 7 days
+
+      const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
+      const requestBody = {
+        from: formatDate(fromDate),
+        to: formatDate(toDate),
+      };
+
+      try {
+        const response = await axios.post(
+          `https://community-based-recycle-tracking-live.onrender.com/recycler/progress/${recyclerId}`,
+          requestBody,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (!response.data?.data?.data) {
+          setEarningError("Invalid API response structure.");
+          return;
+        }
+
+        const earningsData = response.data.data.data.map(
+          (item: { date: string; earnings: number }) => ({
+            day: formatDay(item.date),
+            earnings: item.earnings,
+          })
+        );
+
+        setEarnings(earningsData);
+      } catch {
+        setEarningError("Failed to fetch earnings.");
+      }
+    };
+
+    fetchEvents();
+    fetchEarnings();
   }, [recyclerId, token]);
 
-  const fetchEvents = async () => {
-    if (!recyclerId || !token) {
-      setEventError("Authentication required. Please log in.");
-      return;
-    }
-
-    try {
-      const response = await axios.get(
-        `https://community-based-recycle-tracking-live.onrender.com/recycler/joined-events/${recyclerId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setEvents(response.data.data);
-    } catch {
-      setEventError("Failed to fetch events.");
-    }
-  };
-
-  const fetchEarnings = async () => {
-    if (!recyclerId || !token) {
-      setEarningError("Authentication required. Please log in.");
-      return;
-    }
-  
-    const toDate = new Date();
-    const fromDate = new Date();
-    fromDate.setDate(toDate.getDate() - 7); // 7 days ago
-  
-    const formatDate = (date: Date) => date.toISOString().split("T")[0];
-  
-    const requestBody = {
-      from: formatDate(fromDate),
-      to: formatDate(toDate),
-    };
-  
-    try {
-      const response = await axios.post(
-        `https://community-based-recycle-tracking-live.onrender.com/recycler/progress/${recyclerId}`,
-        requestBody,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-  
-      if (!response.data?.data?.data) {
-        setEarningError("Invalid API response structure.");
-        return;
-      }
-  
-      const earningsData = response.data.data.data.map((item: { date: string; earnings: number }) => ({
-        day: formatDay(item.date),
-        earnings: item.earnings,
-      }));
-  
-      setEarnings(earningsData);
-    } catch (error) {
-      setEarningError("Failed to fetch earnings.");
-    }
-  };
-  
   const formatDay = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       weekday: "long",
@@ -120,7 +112,6 @@ export default function Dashboard() {
     });
   };
 
-  // Using useMemo to avoid unnecessary re-renders
   const formattedEarnings = useMemo(() => earnings, [earnings]);
   const formattedEvents = useMemo(() => events, [events]);
 
@@ -132,7 +123,6 @@ export default function Dashboard() {
 
         <section className="bg-white p-6 rounded-lg shadow-md border">
           <h2 className="text-2xl font-semibold mb-4 text-green-600">Daily Earnings</h2>
-
           {earningError && <p className="text-red-500 text-center">{earningError}</p>}
 
           {formattedEarnings.length > 0 ? (
@@ -147,7 +137,9 @@ export default function Dashboard() {
                 {formattedEarnings.map((item, index) => (
                   <tr key={index} className="text-center border-b">
                     <td className="p-3 border">{item.day}</td>
-                    <td className="p-3 border text-green-500 font-semibold">${item.earnings.toLocaleString()}</td>
+                    <td className="p-3 border text-green-500 font-semibold">
+                      ${item.earnings.toLocaleString()}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -159,7 +151,6 @@ export default function Dashboard() {
 
         <section className="bg-white p-6 rounded-lg shadow-md border mt-6">
           <h2 className="text-2xl font-semibold mb-4 text-blue-600">Joined Events</h2>
-
           {eventError && <p className="text-red-500 text-center">{eventError}</p>}
 
           {formattedEvents.length > 0 ? (

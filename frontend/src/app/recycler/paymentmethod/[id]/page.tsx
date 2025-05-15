@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Navbar from "../../../components/Navbar";
 import Navbar2 from "../../../components/Navbar2";
@@ -13,7 +13,7 @@ export default function PayoutSetup() {
   const handleSetupPayout = async () => {
     try {
       const token = localStorage.getItem("token");
-      const recyclerId = localStorage.getItem("id"); // Get recyclerId from localStorage
+      const recyclerId = localStorage.getItem("id");
 
       if (!token || !recyclerId) {
         setErrorMessage("Authentication token or Recycler ID is missing. Please log in.");
@@ -30,7 +30,8 @@ export default function PayoutSetup() {
 
       alert("Payout details saved successfully!");
     } catch (error) {
-      setErrorMessage("Failed to save payout details.");
+      setErrorMessage("Failed to save payout details. Please try again.");
+      console.error("Payout setup error:", error); // Log error for debugging
     }
   };
 
@@ -40,7 +41,7 @@ export default function PayoutSetup() {
       <div className="flex flex-1 justify-center items-center">
         <div className="p-6 border rounded-lg shadow-md w-100 bg-white">
           <Navbar2 />
-          <h2 className="text-xl font-bold text-center mb-4 ">Setup Payout Method</h2>
+          <h2 className="text-xl font-bold text-center mb-4">Setup Payout Method</h2>
           {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
           <select
             className="border p-2 w-full rounded mb-3"

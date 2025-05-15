@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../../components/Navbar";
 import Navbar2 from "../../../components/Navbar2";
+
 interface UserProfile {
   id: number;
   name: string;
@@ -45,7 +46,7 @@ export default function Profile() {
       });
 
       setProfile(res.data);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch profile.");
     } finally {
       setLoading(false);
@@ -56,9 +57,7 @@ export default function Profile() {
     <div className="min-h-screen bg-gradient-to-b from-[#d6ae7b] to-[#eacda3]">
       <Navbar />
       <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-     <Navbar2 />
-
-
+        <Navbar2 />
 
         {/* Content Section */}
         {loading ? (
@@ -67,9 +66,9 @@ export default function Profile() {
           <p className="text-center text-red-500">{error}</p>
         ) : profile ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/** Name */}
+            {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-[#8e8071]">Name</label>
+              <label className="block text-sm font-medium text-[#8e8071]">Name</label>  
               <input
                 type="text"
                 value={profile.name}
@@ -78,7 +77,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Email */}
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Email</label>
               <input
@@ -89,7 +88,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Age */}
+            {/* Age */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Age</label>
               <input
@@ -100,7 +99,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Total Earnings */}
+            {/* Gender */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Gender</label>
               <input
@@ -111,7 +110,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Unpaid Earnings */}
+            {/* Unpaid Earnings */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Unpaid Earnings</label>
               <input
@@ -122,7 +121,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Wallet */}
+            {/* Wallet */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Wallet Balance</label>
               <input
@@ -133,7 +132,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Role */}
+            {/* Role */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Role</label>
               <input
@@ -144,7 +143,7 @@ export default function Profile() {
               />
             </div>
 
-            {/** Joined Date */}
+            {/* Joined Date */}
             <div>
               <label className="block text-sm font-medium text-[#8e8071]">Joined On</label>
               <input
@@ -158,7 +157,7 @@ export default function Profile() {
         ) : (
           <p className="text-center text-[#8e8071]">No profile data available.</p>
         )}
-        </div>
+      </div>
     </div>
   );
 }

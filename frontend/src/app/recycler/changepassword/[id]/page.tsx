@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Navbar from "../../../components/Navbar";
 import Navbar2 from "../../../components/Navbar2";
 
@@ -15,41 +15,41 @@ export default function ChangePassword() {
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError("All fields are required.");
       return;
     }
-  
+
     if (newPassword.length < 6) {
       setError("New password must be at least 6 characters.");
       return;
     }
-  
+
     if (newPassword !== confirmPassword) {
       setError("New passwords do not match.");
       return;
     }
-  
+
     const id = localStorage.getItem("id");
     const token = localStorage.getItem("token");
-  
+
     if (!id || !token) {
       setError("User authentication failed. Please log in again.");
       return;
     }
-  
+
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     try {
       const response = await axios.post(
-        `https://community-based-recycle-tracking-live.onrender.com/recycler/update-password/${id}`, // Changed from PUT to POST
-        { oldPassword: currentPassword, newPassword, confirmPassword }, // Match backend params
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/update-password/${id}`,
+        { oldPassword: currentPassword, newPassword, confirmPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       if (response.status === 200) {
         setSuccess("Password changed successfully.");
         setCurrentPassword("");
@@ -57,12 +57,14 @@ export default function ChangePassword() {
         setConfirmPassword("");
       }
     } catch (err) {
-      setError((err as any).response?.data?.message || "Failed to update password. Please try again.");
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(
+        axiosError.response?.data?.message || "Failed to update password. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#d6ae7b] to-[#eacda3]">

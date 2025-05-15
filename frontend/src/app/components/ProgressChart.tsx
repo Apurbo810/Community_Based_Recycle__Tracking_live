@@ -1,3 +1,5 @@
+"use client";
+
 // components/ProgressChart.tsx
 import { FC } from 'react';
 import { Line } from 'react-chartjs-2';

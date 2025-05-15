@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import jwt from "jsonwebtoken";
-import Link from "next/link"; // Import Link for navigation
+import Link from "next/link";
+
+interface DecodedToken {
+  id: string;
+}
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -22,14 +26,14 @@ export default function Login() {
       });
 
       const { token, role } = response.data;
-      const decodedToken: any = jwt.decode(token);
+      const decodedToken = jwt.decode(token) as DecodedToken | null;
       const userId = decodedToken?.id;
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
-      localStorage.setItem("id", userId);
+      localStorage.setItem("id", userId || "");
 
-      if (role === "recycler") {
+      if (role === "recycler" && userId) {
         router.push(`/recycler/Dashboard/${userId}`);
       } else {
         setError("Invalid role.");
@@ -94,7 +98,7 @@ export default function Login() {
         </button>
       </form>
       <p className="mt-4 text-sm text-[#8e8071]">
-        Don't have an account?{" "}
+        {"Don't have an account?"}{" "}
         <Link href="/create_account">
           <span className="text-[#7b68ee] hover:underline">Create one</span>
         </Link>

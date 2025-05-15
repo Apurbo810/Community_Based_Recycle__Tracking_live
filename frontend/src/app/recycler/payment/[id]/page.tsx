@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Navbar from "../../../components/Navbar";
 
 export default function Payment() {
@@ -26,9 +26,12 @@ export default function Payment() {
 
   const fetchWalletDetails = async (id: string, token: string) => {
     try {
-      const response = await axios.get(`https://community-based-recycle-tracking-live.onrender.com/recycler/financials/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `https://community-based-recycle-tracking-live.onrender.com/recycler/financials/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setWallet(response.data.wallet);
       setUnpaidEarnings(response.data.unpaidEarnings);
     } catch {
@@ -51,14 +54,21 @@ export default function Payment() {
       );
       setIs2faSent(true);
       setMessage("2FA code sent to your email.");
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to generate 2FA code.");
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      setError(axiosError.response?.data?.message || "Failed to generate 2FA code.");
     }
   };
 
   const handleCashout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!recyclerId || !token || cashoutAmount <= 0 || cashoutAmount > unpaidEarnings || !twofaCode) {
+    if (
+      !recyclerId ||
+      !token ||
+      cashoutAmount <= 0 ||
+      cashoutAmount > unpaidEarnings ||
+      !twofaCode
+    ) {
       setError("Invalid input or insufficient earnings.");
       return;
     }
@@ -78,8 +88,9 @@ export default function Payment() {
       setTwofaCode("");
       setIs2faSent(false);
       setTimeout(() => setMessage(null), 1000);
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to process cashout.");
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      setError(axiosError.response?.data?.message || "Failed to process cashout.");
     } finally {
       setLoading(false);
     }
@@ -95,8 +106,13 @@ export default function Payment() {
 
         <div className="bg-white p-6 rounded-lg shadow-md border mb-6">
           <h2 className="text-xl font-semibold mb-4 text-[#8e8071]">Wallet Balance</h2>
-          <p>💰 Wallet: <span className="font-semibold text-[#8e8071]">${wallet}</span></p>
-          <p>⏳ Unpaid Earnings: <span className="font-semibold text-[#8e8071]">${unpaidEarnings}</span></p>
+          <p>
+            💰 Wallet: <span className="font-semibold text-[#8e8071]">${wallet}</span>
+          </p>
+          <p>
+            ⏳ Unpaid Earnings:{" "}
+            <span className="font-semibold text-[#8e8071]">${unpaidEarnings}</span>
+          </p>
         </div>
 
         <form onSubmit={handleCashout} className="bg-white p-6 rounded-lg shadow-md border">
