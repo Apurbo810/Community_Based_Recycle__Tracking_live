@@ -48,10 +48,10 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-[#d6ae7b] to-[#eacda3]">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#d6ae7b] to-[#eacda3]">
       <form
         onSubmit={handleSubmit}
-        className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md"
+        className="max-w-sm w-full bg-white p-6 rounded-lg shadow-md"
       >
         <div className="mb-5">
           <label
@@ -92,15 +92,15 @@ export default function Login() {
         )}
         <button
           type="submit"
-          className="w-full text-white bg-[#7b68ee] hover:bg-[#6a4fd4] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="w-full text-white bg-[#7b68ee] hover:bg-[#6a4fd4] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Login
         </button>
       </form>
       <p className="mt-4 text-sm text-[#8e8071]">
-        {"Don't have an account?"}{" "}
+        {"Don't have an account? " }
         <Link href="/create_account">
-          <span className="text-[#7b68ee] hover:underline">Create one</span>
+          <span className="text-[#7b68ee] hover:underline cursor-pointer">Create one</span>
         </Link>
       </p>
     </div>

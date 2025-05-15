@@ -1,47 +1,48 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import axios, { AxiosError } from "axios";
-import Navbar from "../../../components/Navbar";
-import Navbar2 from "../../../components/Navbar2";
+import React, { useState } from 'react';
+import axios, { AxiosError } from 'axios';
+import Navbar from '../../../components/Navbar';
+import Navbar2 from '../../../components/Navbar2';
 
 export default function ChangePassword() {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setError(null);
+    setSuccess(null);
+
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError("All fields are required.");
+      setError('All fields are required.');
       return;
     }
 
     if (newPassword.length < 6) {
-      setError("New password must be at least 6 characters.");
+      setError('New password must be at least 6 characters.');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New passwords do not match.");
+      setError('New passwords do not match.');
       return;
     }
 
-    const id = localStorage.getItem("id");
-    const token = localStorage.getItem("token");
+    const id = localStorage.getItem('id');
+    const token = localStorage.getItem('token');
 
     if (!id || !token) {
-      setError("User authentication failed. Please log in again.");
+      setError('User authentication failed. Please log in again.');
       return;
     }
 
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     try {
       const response = await axios.post(
@@ -51,15 +52,15 @@ export default function ChangePassword() {
       );
 
       if (response.status === 200) {
-        setSuccess("Password changed successfully.");
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+        setSuccess('Password changed successfully.');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
       }
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>;
       setError(
-        axiosError.response?.data?.message || "Failed to update password. Please try again."
+        axiosError.response?.data?.message || 'Failed to update password. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -73,8 +74,8 @@ export default function ChangePassword() {
         <Navbar2 />
         <h2 className="text-2xl font-semibold text-center text-[#4a734a] mb-4">Change Password</h2>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {success && <p className="text-green-500 text-center">{success}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
         <form onSubmit={handlePasswordChange} className="space-y-4">
           <div>
@@ -96,6 +97,7 @@ export default function ChangePassword() {
               onChange={(e) => setNewPassword(e.target.value)}
               className="w-full px-3 py-2 border rounded-md bg-gray-100 text-[#8e8071]"
               required
+              minLength={6}
             />
           </div>
 
@@ -107,15 +109,16 @@ export default function ChangePassword() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-3 py-2 border rounded-md bg-gray-100 text-[#8e8071]"
               required
+              minLength={6}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#4a734a] text-white font-semibold py-2 rounded-md hover:bg-[#3a5a3a] transition duration-300"
+            className="w-full bg-[#4a734a] text-white font-semibold py-2 rounded-md hover:bg-[#3a5a3a] transition duration-300 disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? "Updating..." : "Change Password"}
+            {loading ? 'Updating...' : 'Change Password'}
           </button>
         </form>
       </div>
